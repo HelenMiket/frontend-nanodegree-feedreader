@@ -114,25 +114,30 @@ $(function () {
 
     /* Test suite "New Feed Selection" */
     describe(`New FEED Selection`, function () {
-        var container;
-        var oldEntry;
-
+        let prevFeedData;
+        let newFeedData;
+      
         beforeEach(function (done) {
-            container = document.querySelector(".feed");
-            expect(container).toBeDefined();
-            oldEntry = container.querySelector(".entry-link");
-            expect(oldEntry).toBeDefined();
+            const container = document.querySelector(".feed");
 
-            // load a new feed
-            loadFeed(2, function () {
-                done();
+            loadFeed(0, function () {
+                // feed 0 done loading. Store the html of the first entry link in variable prevFeedData
+                prevFeedData = container.querySelector(".entry-link");
+
+                loadFeed(1, function () {
+                    //feed 1 done loading. Store the html of the first entry link in variable newFeedData
+                    newFeedData = container.querySelector(".entry-link");
+                    
+                    done();
+                });
             });
         });
 
         it(`the content within the feed container changes when a new feed is loaded by the loadFeed function`, function (done) {
-            const newEntry = container.querySelector(".entry-link");
-            expect(newEntry).toBeDefined();
-            expect(newEntry).not.toBe(oldEntry);
+            expect(prevFeedData).toBeDefined();
+            expect(newFeedData).toBeDefined();
+            expect(newFeedData).not.toBe(prevFeedData);
+
             done();
         });
     });
